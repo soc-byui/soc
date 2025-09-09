@@ -1,31 +1,29 @@
-// Reveal panels on scroll
+// soc.js
+
+// ===== Scroll-triggered panel animations =====
 const panels = document.querySelectorAll(".panel");
 
-const revealOnScroll = () => {
-  const triggerBottom = window.innerHeight * 0.85;
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active"); // fade in
+      } else {
+        entry.target.classList.remove("active"); // reset so it can replay
+      }
+    });
+  },
+  { threshold: 0.3 }
+);
 
-  panels.forEach(panel => {
-    const panelTop = panel.getBoundingClientRect().top;
+panels.forEach((panel) => observer.observe(panel));
 
-    if (panelTop < triggerBottom) {
-      panel.classList.add("visible");
-    } else {
-      panel.classList.remove("visible");
-    }
-  });
-};
 
-window.addEventListener("scroll", revealOnScroll);
-revealOnScroll();
+// ===== Orb shimmer in hero (optional) =====
+const hero = document.querySelector(".hero");
 
-// Subtle glowing nav effect
-const navLinks = document.querySelectorAll(".navbar a");
-
-navLinks.forEach(link => {
-  link.addEventListener("mouseenter", () => {
-    link.style.textShadow = `0 0 10px #0047ba, 0 0 20px #0047ba`;
-  });
-  link.addEventListener("mouseleave", () => {
-    link.style.textShadow = "none";
-  });
+window.addEventListener("scroll", () => {
+  const scrollY = window.scrollY;
+  // subtle background shift (parallax-like)
+  hero.style.backgroundPosition = `center ${scrollY * 0.2}px`;
 });

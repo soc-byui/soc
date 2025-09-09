@@ -1,107 +1,336 @@
-/* Colors: Blue #0047BA | Black #000505 | Gray #9C92A3 */
+/* ===== Base Styles (always apply) ===== */
 :root {
-  --blue: #0047ba;
+  --blue: #0047BA;
   --black: #000505;
-  --gray: #9c92a3;
-  --white: #f5f5f5;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Consolas', 'Courier New', monospace;
+  --gray: #9C92A3;
+  --white: #f0f0f0;
 }
 
 body {
+  margin: 0;
+  padding: 0;
   background-color: var(--black);
   color: var(--white);
+  font-family: Consolas, monospace;
+  line-height: 1.5;
   scroll-behavior: smooth;
 }
 
-header.hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: radial-gradient(circle, var(--blue) 0%, var(--black) 80%);
-  text-align: center;
-  animation: fadeIn 2s ease-in;
+main, section {
+  width: 90%;           /* flexible width */
+  max-width: 1200px;    /* prevent overly stretched content on huge screens */
+  margin: 0 auto;       /* center everything */
 }
 
-header.hero h1 {
-  font-size: 3rem;
+
+/* ===== Hero Section ===== */
+header.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* vertical center */
+  align-items: center;       /* horizontal center */
+  text-align: center;
+
+  width: 100%;
+  min-height: 100vh;         /* full screen height */
+  padding: 0 1rem;
+
+  box-sizing: border-box;
+  overflow: hidden;
+
   color: var(--white);
-  text-shadow: 0 0 15px var(--blue);
+  border-bottom: 2px solid var(--gray);
+
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 71, 186, 0.15) 0px,
+      rgba(0, 71, 186, 0.15) 2px,
+      transparent 2px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(156, 146, 163, 0.15) 0px,
+      rgba(156, 146, 163, 0.15) 2px,
+      transparent 2px,
+      transparent 40px
+    ),
+    var(--black);
+}
+
+.hero p,
+.hero-subtitle {
+  color: var(--gray); /* exact match with the hero <p> */
+}
+
+.hero-subtitle {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+/* Glowing orb behind text */
+header.hero h1,
+header.hero p {
+  position: relative;
+  z-index: 1; /* ensure text sits above orb */
+}
+
+/* Orb pulsing animation */
+@keyframes orbPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+  }
+}
+
+
+
+header.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3rem); /* scales with screen size */
+  text-align: center;
+  white-space: normal; /* allow wrapping if needed */
+  word-break: keep-all; /* keeps words together */
+  color: var(--blue);
+  text-shadow: 0 0 15px var(--blue), 0 0 30px var(--blue);
+  animation: glow 2s ease-in-out infinite alternate;
 }
 
 header.hero p {
-  margin-top: 1rem;
+  font-size: 1.3rem;
   color: var(--gray);
+  margin-top: 1rem;
 }
 
+@keyframes glow {
+  from { text-shadow: 0 0 10px var(--blue), 0 0 20px var(--blue); }
+  to   { text-shadow: 0 0 20px var(--blue), 0 0 40px var(--blue); }
+}
+
+/* ===== Navbar ===== */
 .navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: rgba(0, 5, 5, 0.8);
-  padding: 0.8rem;
   display: flex;
   justify-content: center;
   gap: 2rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.85);
+  position: sticky;
+  top: 0;
   z-index: 1000;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(6px);
 }
 
 .navbar a {
-  color: var(--white);
   text-decoration: none;
-  transition: color 0.3s ease;
+  color: var(--blue);
+  font-weight: bold;
+  transition: color 0.3s, text-shadow 0.3s;
 }
 
 .navbar a:hover {
+  color: var(--white);
+  text-shadow: 0 0 8px var(--blue);
+}
+
+/* Panel itself: background + centering */
+/* Panels: let content size itself naturally */
+.panel {
+  display: block;       /* no flex issues */
+  min-height: auto;     /* remove forced full screen height */
+  padding: 4rem 2rem;   /* keep some breathing space */
+  text-align: center;
+  background: linear-gradient(to bottom right, #000505, #0a0a0a);
+  border-bottom: 2px solid var(--gray);
+}
+
+/* Panel content wrapper */
+.panel-content {
+  max-width: 800px;
+  margin: 0 auto;       /* center content */
+}
+
+
+
+/* Sections overall */
+section {
+  padding-top: 2rem;      /* less gap at the top of each section */
+  padding-bottom: 2rem;   /* keeps balance at the bottom */
+}
+
+
+/* Headings inside */
+.panel-content h2 {
+  font-size: 2.5rem;
+  color: var(--blue);
+  margin-bottom: 1.5rem;
+}
+
+/* Paragraphs: less “spread out” */
+.panel-content p {
+  margin-bottom: 1rem;   /* tighter spacing between paragraphs */
+  line-height: 1.6;      /* readable but not too airy */
+  max-width: 70ch;       /* keeps text condensed for readability */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Main steps */
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 2rem auto;
+  max-width: 700px;
+  text-align: left;
+}
+
+.steps > li {
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
   color: var(--blue);
 }
 
-.panel {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(50px);
-  transition: opacity 1s ease, transform 1s ease;
+/* Subpoints inside each step */
+.subpoints {
+  list-style: none;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
 }
 
-.panel.visible {
+.subpoints li::before {
+  content: "⚔ ";  /* sword bullet! */
+  color: var(--blue);
+}
+.subpoints li {
+  color: var(--white);
+  margin: 0.3rem 0;
+}
+
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.9);
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+
+/* ===== Media Queries ===== */
+
+/* Phones (≤480px) */
+@media (max-width: 480px) {
+  header.hero h1 {
+    font-size: 1.8rem;
+  }
+  header.hero p {
+    font-size: 1rem;
+  }
+  .navbar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .panel h2 {
+    font-size: 1.8rem;
+  }
+  .panel p {
+    font-size: 1rem;
+  }
+}
+
+/* Tablets (481px–768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  header.hero h1 {
+    font-size: 2.2rem;
+  }
+  .panel h2 {
+    font-size: 2rem;
+  }
+}
+
+/* Laptops / Desktops: 769px – 1439px */
+@media (min-width: 769px) and (max-width: 1439px) {
+  header.hero h1 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    text-shadow: 0 0 20px var(--blue), 0 0 35px var(--blue);
+  }
+  main, section {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+}
+
+/* TVs / Ultra-wide: ≥1440px */
+@media (min-width: 1440px) {
+  header.hero h1 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    text-shadow: 0 0 25px var(--blue), 0 0 50px var(--blue);
+  }
+  main, section {
+    max-width: 1200px;
+  }
+}
+
+
+
+
+/* === Panel Scroll Animations === */
+.panel {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.panel.active {
   opacity: 1;
   transform: translateY(0);
 }
 
-.panel h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: var(--blue);
+
+/* === Orb Shift Controlled by JS === */
+header.hero::before {
+  content: "";
+  position: absolute;
+  top: calc(50% + var(--orb-shift, 0px)); /* parallax shift */
+  left: 50%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 71, 186, 0.6), transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+  transform: translate(-50%, -50%);
+  animation: orbPulse 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.panel p {
-  max-width: 600px;
-  color: var(--gray);
+
+
+.training-path {
+  list-style: none;         /* remove default bullets */
+  padding: 0; 
+  margin: 2rem auto;
+  max-width: 600px;         /* keep it tidy */
+  text-align: left;         /* align like a proper scroll of wisdom */
+}
+
+.training-path li {
+  margin: 0.75rem 0;
   font-size: 1.2rem;
+  position: relative;
+  padding-left: 2rem;       /* space for the sword */
 }
 
-footer {
-  padding: 2rem;
-  text-align: center;
-  color: var(--gray);
-  border-top: 1px solid var(--blue);
-  background: #000;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.training-path li::before {
+  content: "⚔";
+  color: var(--blue);
+  position: absolute;
+  left: 0;
+  font-size: 1.3rem;
+  text-shadow: 0 0 8px var(--blue);
 }
