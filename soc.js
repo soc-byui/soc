@@ -7,16 +7,36 @@ const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add("active"); // fade in
+        entry.target.classList.add("active");
       } else {
-        entry.target.classList.remove("active"); // reset so it can replay
+        entry.target.classList.remove("active");
       }
     });
   },
-  { threshold: 0.3 }
+  { threshold: 0.1 } // smaller threshold triggers when a small part is visible
 );
 
 panels.forEach((panel) => observer.observe(panel));
+
+
+// Animate main steps in Path section
+const stepItems = document.querySelectorAll(".steps > li");
+
+const stepsObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+      } else {
+        entry.target.classList.remove("active");
+      }
+    });
+  },
+  { threshold: 0.1 }
+);
+
+stepItems.forEach(item => stepsObserver.observe(item));
+
 
 
 // ===== Orb shimmer in hero (optional) =====
